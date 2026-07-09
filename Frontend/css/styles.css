@@ -1,0 +1,518 @@
+/* ==========================================================================
+   POESSA AI Assistant — Widget Styles
+   Design tokens are namespaced (--poessa-*) so this can be dropped into an
+   existing site without colliding with host page variables.
+   ========================================================================== */
+
+:root {
+  /* Color */
+  --poessa-ink: #0A1628;
+  --poessa-ink-soft: #4A5568;
+  --poessa-surface: #FFFFFF;
+  --poessa-bg-soft: #F0F4FF;
+  --poessa-primary: #1A56DB;
+  --poessa-primary-dark: #1E3A8A;
+  --poessa-primary-tint: #DBEAFE;
+  --poessa-accent: #1A56DB;
+  --poessa-accent-soft: #DBEAFE;
+  --poessa-border: #E2E8F0;
+  --poessa-danger: #DC2626;
+  --poessa-focus-ring: #3B82F6;
+
+  /* Type */
+  --poessa-font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --poessa-font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --poessa-font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Layout */
+  --poessa-window-w: 400px;
+  --poessa-window-h: 620px;
+  --poessa-radius-lg: 20px;
+  --poessa-radius-md: 14px;
+  --poessa-radius-sm: 10px;
+  --poessa-shadow-button: 0 6px 20px rgba(30, 58, 138, 0.28), 0 2px 6px rgba(30, 58, 138, 0.18);
+  --poessa-shadow-window: 0 20px 60px rgba(10, 22, 40, 0.22), 0 4px 14px rgba(10, 22, 40, 0.12);
+  --poessa-z: 2147483000;
+}
+
+/* ==========================================================================
+   Demo host page (not part of the embeddable widget)
+   ========================================================================== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--poessa-font-body);
+  color: var(--poessa-ink);
+  /* background: var(--poessa-bg-soft); */
+  background: #3498db;
+  -webkit-font-smoothing: antialiased;
+}
+
+.demo-page__header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 32px;
+  background: var(--poessa-surface);
+  border-bottom: 1px solid var(--poessa-border);
+}
+
+.demo-page__logo {
+  width: 48px;
+  height: auto;
+  flex-shrink: 0;
+  display: block;
+}
+
+.demo-page__eyebrow {
+  margin: 0 0 2px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--poessa-primary);
+  font-weight: 600;
+}
+.demo-page__title {
+  margin: 0;
+  font-family: var(--poessa-font-display);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--poessa-primary-dark);
+}
+
+.demo-page__main { max-width: 880px; margin: 0 auto; padding: 48px 32px 120px; }
+.demo-page__hero h2 {
+  font-family: var(--poessa-font-display);
+  font-size: 30px;
+  margin: 0 0 12px;
+  /* color: var(--poessa-ink); */
+  color: white;
+}
+.demo-page__hero p { font-size: 15.5px; line-height: 1.6; color:white; max-width: 560px; }
+
+.demo-page__cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 36px;
+}
+.demo-page__card {
+  background: var(--poessa-surface);
+  border: 1px solid var(--poessa-border);
+  border-radius: var(--poessa-radius-md);
+  padding: 20px;
+}
+.demo-page__card h3 { margin: 0 0 8px; font-size: 15px; color: var(--poessa-primary-dark); }
+.demo-page__card p { margin: 0; font-size: 13.5px; color: var(--poessa-ink-soft); line-height: 1.5; }
+
+@media (max-width: 720px) {
+  .demo-page__cards { grid-template-columns: 1fr; }
+  .demo-page__main { padding: 32px 20px 120px; }
+  .demo-page__logo { width: 40px; }
+  .demo-page__title { font-size: 18px; }
+}
+
+@media (max-width: 480px) {
+  .demo-page__header { padding: 16px; gap: 12px; flex-wrap: wrap; }
+  .demo-page__logo { width: 36px; }
+  .demo-page__title { font-size: 16px; }
+}
+
+/* ==========================================================================
+   Widget root — reset inheritance from host page
+   ========================================================================== */
+#poessa-chat-widget-root,
+#poessa-chat-widget-root * {
+  box-sizing: border-box;
+  font-family: var(--poessa-font-body);
+}
+
+.poessa-widget {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: var(--poessa-z);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* ==========================================================================
+   ChatButton
+   ========================================================================== */
+.poessa-launcher {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(155deg, var(--poessa-primary) 0%, var(--poessa-primary-dark) 100%);
+  box-shadow: var(--poessa-shadow-button);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  position: relative;
+}
+.poessa-launcher:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 10px 26px rgba(30, 58, 138, 0.34), 0 3px 8px rgba(30, 58, 138, 0.2);
+}
+.poessa-launcher:focus-visible {
+  outline: 3px solid var(--poessa-focus-ring);
+  outline-offset: 3px;
+}
+.poessa-launcher__icon { width: 26px; height: 26px; display: block; transition: opacity 0.15s ease, transform 0.15s ease; }
+.poessa-launcher__icon--close {
+  position: absolute;
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.7);
+}
+.poessa-launcher.is-open .poessa-launcher__icon--chat { opacity: 0; transform: rotate(45deg) scale(0.7); }
+.poessa-launcher.is-open .poessa-launcher__icon--close { opacity: 1; transform: rotate(0) scale(1); }
+
+.poessa-launcher__badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--poessa-accent);
+  border: 2px solid var(--poessa-bg-soft);
+}
+
+/* ==========================================================================
+   ChatWindow
+   ========================================================================== */
+.poessa-window {
+  width: var(--poessa-window-w);
+  height: var(--poessa-window-h);
+  max-height: calc(100vh - 110px);
+  background: var(--poessa-surface);
+  border-radius: var(--poessa-radius-lg);
+  box-shadow: var(--poessa-shadow-window);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: absolute;
+  bottom: 78px;
+  right: 0;
+  transform-origin: bottom right;
+  transform: scale(0.92) translateY(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease;
+  border: 1px solid var(--poessa-border);
+}
+.poessa-window.is-open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.poessa-window.is-minimized { display: none; }
+
+/* ---- Header ---- */
+.poessa-header {
+  background: linear-gradient(155deg, var(--poessa-primary) 0%, var(--poessa-primary-dark) 100%);
+  color: #fff;
+  padding: 16px 16px 15px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  position: relative;
+}
+.poessa-header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: var(--poessa-accent);
+}
+.poessa-header__logo {
+  width: 36px;
+  height: auto;
+  border-radius: 0;
+  flex-shrink: 0;
+  display: block;
+}
+
+.poessa-header__text { flex: 1; min-width: 0; }
+.poessa-header__title {
+  margin: 0;
+  font-family: var(--poessa-font-display);
+  font-size: 16.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.poessa-header__subtitle {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.3;
+}
+.poessa-header__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
+  margin-top: 4px;
+}
+.poessa-header__status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #6FCF97;
+  box-shadow: 0 0 0 2px rgba(111,207,151,0.25);
+}
+
+.poessa-header__actions { display: flex; gap: 2px; flex-shrink: 0; }
+.poessa-header__btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.poessa-header__btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+.poessa-header__btn:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+.poessa-header__btn svg { width: 16px; height: 16px; }
+
+/* ---- Messages area ---- */
+.poessa-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--poessa-bg-soft);
+  scroll-behavior: smooth;
+}
+.poessa-messages::-webkit-scrollbar { width: 6px; }
+.poessa-messages::-webkit-scrollbar-thumb { background: #B0C4DE; border-radius: 4px; }
+.poessa-messages::-webkit-scrollbar-track { background: transparent; }
+
+.poessa-welcome {
+  background: var(--poessa-surface);
+  border: 1px solid var(--poessa-border);
+  border-radius: var(--poessa-radius-md);
+  padding: 16px;
+}
+.poessa-welcome__greeting {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--poessa-ink);
+}
+.poessa-welcome__greeting strong { color: var(--poessa-primary-dark); }
+.poessa-welcome__notice {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--poessa-ink-soft);
+  padding-top: 10px;
+  border-top: 1px dashed var(--poessa-border);
+}
+
+.poessa-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.poessa-chip {
+  border: 1px solid var(--poessa-primary);
+  color: var(--poessa-primary-dark);
+  background: var(--poessa-primary-tint);
+  border-radius: 999px;
+  padding: 7px 13px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  font-family: var(--poessa-font-body);
+}
+.poessa-chip:hover { background: #B3D4FE; transform: translateY(-1px); }
+.poessa-chip:focus-visible { outline: 2px solid var(--poessa-focus-ring); outline-offset: 2px; }
+
+/* ---- Message rows ---- */
+.poessa-row { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
+.poessa-row--user { justify-content: flex-end; }
+.poessa-row--assistant { justify-content: flex-start; }
+
+.poessa-avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--poessa-primary);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  flex-shrink: 0;
+  font-family: var(--poessa-font-display);
+}
+
+.poessa-bubble-group { display: flex; flex-direction: column; max-width: 78%; }
+.poessa-row--user .poessa-bubble-group { align-items: flex-end; }
+.poessa-row--assistant .poessa-bubble-group { align-items: flex-start; }
+
+.poessa-bubble {
+  padding: 10px 13px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.poessa-row--user .poessa-bubble {
+  background: var(--poessa-primary);
+  color: #fff;
+  border-radius: var(--poessa-radius-md) var(--poessa-radius-md) 4px var(--poessa-radius-md);
+}
+.poessa-row--assistant .poessa-bubble {
+  background: var(--poessa-surface);
+  color: var(--poessa-ink);
+  border: 1px solid var(--poessa-border);
+  border-radius: var(--poessa-radius-md) var(--poessa-radius-md) var(--poessa-radius-md) 4px;
+}
+.poessa-bubble--error {
+  background: #FEE2E2 !important;
+  color: var(--poessa-danger) !important;
+  border-color: #FCA5A5 !important;
+}
+
+.poessa-timestamp {
+  font-family: var(--poessa-font-mono);
+  font-size: 10px;
+  color: var(--poessa-ink-soft);
+  opacity: 0.7;
+  margin-top: 4px;
+  padding: 0 3px;
+}
+
+/* ---- Typing indicator ---- */
+.poessa-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+  background: var(--poessa-surface);
+  border: 1px solid var(--poessa-border);
+  border-radius: var(--poessa-radius-md) var(--poessa-radius-md) var(--poessa-radius-md) 4px;
+  width: fit-content;
+}
+.poessa-typing__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--poessa-primary);
+  opacity: 0.5;
+  animation: poessa-typing-bounce 1.1s infinite ease-in-out;
+}
+.poessa-typing__dot:nth-child(2) { animation-delay: 0.15s; }
+.poessa-typing__dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes poessa-typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ---- Input area ---- */
+.poessa-input-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--poessa-surface);
+  border-top: 1px solid var(--poessa-border);
+  flex-shrink: 0;
+}
+.poessa-input {
+  flex: 1;
+  resize: none;
+  border: 1.5px solid var(--poessa-border);
+  border-radius: var(--poessa-radius-sm);
+  padding: 10px 12px;
+  font-size: 13.5px;
+  font-family: var(--poessa-font-body);
+  line-height: 1.45;
+  max-height: 100px;
+  min-height: 40px;
+  color: var(--poessa-ink);
+  background: var(--poessa-bg-soft);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.poessa-input::placeholder { color: #8A968F; }
+.poessa-input:focus {
+  outline: none;
+  border-color: var(--poessa-primary);
+  box-shadow: 0 0 0 3px var(--poessa-primary-tint);
+  background: var(--poessa-surface);
+}
+
+.poessa-send {
+  width: 40px; height: 40px;
+  border-radius: var(--poessa-radius-sm);
+  border: none;
+  background: var(--poessa-primary);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.poessa-send:hover:not(:disabled) { background: var(--poessa-primary-dark); }
+.poessa-send:active:not(:disabled) { transform: scale(0.94); }
+.poessa-send:disabled { background: #B0C4DE; cursor: not-allowed; }
+.poessa-send:focus-visible { outline: 2px solid var(--poessa-focus-ring); outline-offset: 2px; }
+.poessa-send svg { width: 17px; height: 17px; }
+
+.poessa-footnote {
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--poessa-ink-soft);
+  padding: 0 14px 10px;
+  background: var(--poessa-surface);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 900px) and (min-width: 481px) {
+  :root { --poessa-window-w: 360px; --poessa-window-h: 560px; }
+}
+
+@media (max-width: 480px) {
+  .poessa-widget { right: 12px; bottom: 12px; }
+  .poessa-window {
+    position: fixed;
+    width: calc(100vw - 24px);
+    height: calc(100vh - 100px);
+    max-height: calc(100vh - 100px);
+    right: 12px;
+    left: 12px;
+    bottom: 78px;
+  }
+  .poessa-launcher { width: 56px; height: 56px; }
+  .poessa-header__logo { width: 30px; }
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .poessa-launcher,
+  .poessa-window,
+  .poessa-chip,
+  .poessa-send,
+  .poessa-typing__dot,
+  .poessa-launcher__icon {
+    transition: none !important;
+    animation: none !important;
+  }
+}

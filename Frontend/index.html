@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POESSA AI Assistant — Widget Demo</title>
+
+<!-- Fonts: Newsreader (header gravitas) + Inter (UI body) + IBM Plex Mono (timestamps) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       DEMO HOST PAGE
+       This section simulates the POESSA website the widget will be
+       embedded into. Only the #poessa-chat-widget-root container
+       below (plus css/styles.css and the js/ folder) is needed
+       for the actual embed.
+  ============================================================= -->
+  <header class="demo-page__header">
+    <img src="logo.png" alt="POESSA Logo" class="demo-page__logo">
+    <div>
+      <p class="demo-page__eyebrow">የግል ድርጅት ሠራተኞች ማህበራዊ ዋስትና አስተዳደር</p>
+      <h1 class="demo-page__title">የመረጃና  አገልግሎቶች ፖርታል</h1>
+    </div>
+  </header>
+
+  <main class="demo-page__main">
+    <section class="demo-page__hero">
+      <h2>እንኳን በደህና መጡ</h2>
+      <p>
+        ስለ ምዝገባ፣ ጡረታ ፣ አስፈላጊ ሰነዶች እና የመዋጮ አሰራሮች መረጃ ያግኙ።
+        <br><br>
+        ይህ የ AI ረዳት የተለመዱ ጥያቄዎችን ለመመለስ ይረዳዎታል።
+      </p>
+    </section>
+
+    <section class="demo-page__cards">
+      <article class="demo-page__card">
+        <h3>ምዝገባ</h3>
+        <p>ድርጅት ወይም ሰራተኛ ለመመዝገብ ደረጃዎች እና መስፈርቶች።</p>
+      </article>
+      <article class="demo-page__card">
+        <h3>የጡረታ አገልግሎቶች</h3>
+        <p>የብቃት መመዘኛዎች፣ የመዋጮ ታሪክ እና የጥቅማ ጥቅሞች ስሌት።</p>
+      </article>
+      <article class="demo-page__card">
+        <h3>አስፈላጊ ሰነዶች</h3>
+        <p>ለግለሰብ እና ለአሰሪ ማቅረቢያ የተፈለጉ ሰነዶች ዝርዝር።</p>
+      </article>
+    </section>
+  </main>
+
+  <!-- ============================================================
+       WIDGET ROOT — this is the only element the embed script needs
+  ============================================================= -->
+  <div id="poessa-chat-widget-root"></div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/messages.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
