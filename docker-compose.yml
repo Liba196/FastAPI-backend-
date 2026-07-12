@@ -14,6 +14,8 @@ services:
 
     volumes:
       - poessa_pgdata:/var/lib/postgresql/data
+        # This line automatically integrates your schema on startup:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
 
 volumes:
   poessa_pgdata:
