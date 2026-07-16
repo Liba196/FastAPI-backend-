@@ -8,7 +8,7 @@ from pgvector.psycopg import register_vector
 from google import genai
 from google.genai.errors import APIError
 
-from backend.app.scripts.ingest import extract_text, chunk_text
+from backend.app.services.ingest import extract_text, chunk_text
 
 load_dotenv()
 # Load API key from common environment variable names. Prefer a dedicated
