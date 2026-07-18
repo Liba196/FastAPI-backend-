@@ -15,60 +15,69 @@
    * user, the assistant, or (eventually) the streaming/error paths.
    */
   function createMessage(partial) {
-    return Object.assign(
-      {
-        id: generateId('msg'),
-        role: 'assistant', // 'user' | 'assistant'
-        text: '',
-        timestamp: new Date(),
-        citations: [],
-        sources: [],
-        attachments: [],
-        isError: false,
-        isLoading: false,
-      },
-      partial
-    );
-  }
+  return Object.assign(
+    {
+      id: generateId('msg'),
+      role: 'assistant',
+      text: '',
+      timestamp: new Date(),
+      citations: [],
+      sources: [],
+      attachments: [],
+      isError: false,
+      isLoading: false,
+      isUngrounded: false,   // <-- new
+    },
+    partial
+  );
+}
 
   /** Renders a single message object into a `.poessa-row` DOM element. */
-  function renderMessageRow(message) {
-    const isUser = message.role === 'user';
+ function renderSources(sources) {
+  if (!sources || !sources.length) return null;
+  const items = sources.map((s) =>
+    h('li', { class: 'poessa-source-chip' }, [
+      h('span', { class: 'poessa-source-chip__title' }, [s.title]),
+      s.excerpt ? h('span', { class: 'poessa-source-chip__excerpt' }, [s.excerpt]) : null,
+    ])
+  );
+  return h('ul', { class: 'poessa-sources', 'aria-label': 'Sources' }, items);
+}
 
-    const bubble = h('div', {
-      class: `poessa-bubble${message.isError ? ' poessa-bubble--error' : ''}`,
-      html: escapeHTML(message.text).replace(/\n/g, '<br>'),
-    });
+function renderMessageRow(message) {
+  const isUser = message.role === 'user';
 
-    const group = h('div', { class: 'poessa-bubble-group' }, [
-      bubble,
-      h('span', { class: 'poessa-timestamp' }, [formatTime(message.timestamp)]),
-    ]);
+  const bubbleClass =
+    `poessa-bubble${message.isError ? ' poessa-bubble--error' : ''}` +
+    `${message.isUngrounded ? ' poessa-bubble--ungrounded' : ''}`;
 
-    const children = isUser
-      ? [group]
-      : [
-          h(
-            'div',
-            { class: 'poessa-avatar', 'aria-hidden': 'true' },
-            ['AI']
-          ),
-          group,
-        ];
+  const bubble = h('div', {
+    class: bubbleClass,
+    html: escapeHTML(message.text).replace(/\n/g, '<br>'),
+  });
 
-    const row = h(
-      'div',
-      {
-        class: `poessa-row poessa-row--${isUser ? 'user' : 'assistant'}`,
-        'data-message-id': message.id,
-        role: 'group',
-        'aria-label': `${isUser ? 'እርስዎ' : 'የፖኤሳ AI ረዳት'} ብለዋል`,
-      },
-      children
-    );
+  const groupChildren = [bubble];
+  const sourcesEl = renderSources(message.sources);
+  if (sourcesEl) groupChildren.push(sourcesEl);
+  groupChildren.push(h('span', { class: 'poessa-timestamp' }, [formatTime(message.timestamp)]));
 
-    return row;
-  }
+  const group = h('div', { class: 'poessa-bubble-group' }, groupChildren);
+
+  const children = isUser
+    ? [group]
+    : [h('div', { class: 'poessa-avatar', 'aria-hidden': 'true' }, ['AI']), group];
+
+  return h(
+    'div',
+    {
+      class: `poessa-row poessa-row--${isUser ? 'user' : 'assistant'}`,
+      'data-message-id': message.id,
+      role: 'group',
+      'aria-label': `${isUser ? 'እርስዎ' : 'የፖኤሳ AI ረዳት'} ብለዋል`,
+    },
+    children
+  );
+}
 
   /** Renders the animated three-dot typing indicator row. */
   function renderTypingIndicator() {
