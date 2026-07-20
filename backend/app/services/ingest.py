@@ -60,29 +60,22 @@ def extract_text(pdf_path: str) -> list[dict]:
 
     if pages_needing_ocr:
         print(f"Pages needing OCR: {pages_needing_ocr}")
-        images = convert_from_path(pdf_path, dpi=300)
         for page_num in pages_needing_ocr:
-            raw_image = images[page_num - 1]
+            # Render ONLY this one page, not the whole document — keeps
+            # peak memory to roughly one page's worth instead of all of them.
+            page_images = convert_from_path(
+                pdf_path, dpi=300, first_page=page_num, last_page=page_num
+            )
+            raw_image = page_images[0]
             processed_image = preprocess_for_ocr(raw_image)
             ocr_text = pytesseract.image_to_string(
                 processed_image, lang="amh+eng", config=OCR_CONFIG
             )
             pages[page_num - 1]["text"] = clean_ocr_text(ocr_text)
+            del page_images, raw_image, processed_image  # free immediately, don't wait for GC
 
-    if pages_needing_ocr:
-        print(f"Pages needing OCR: {pages_needing_ocr}")
-        images = convert_from_path(pdf_path, dpi=300)
-        for page_num in pages_needing_ocr:
-            raw_image = images[page_num - 1]
-            processed_image = preprocess_for_ocr(raw_image)
-            ocr_text = pytesseract.image_to_string(
-                processed_image, lang="amh+eng", config=OCR_CONFIG
-            )
-            pages[page_num - 1]["text"] = clean_ocr_text(ocr_text)
-
-    pages = filter_toc_pages(pages)   # <-- new line
+    pages = filter_toc_pages(pages)
     return pages
-
     
 
 

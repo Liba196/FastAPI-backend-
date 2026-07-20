@@ -16,15 +16,35 @@ from app.services.embed_and_store import ingest_document
 DOCUMENTS_DIR = "documents"
 
 DOCUMENTS = [
-    {
-        "filename": "sample.pdf",
-        "title": "Private Organizations Employees' Pension Implementation Directive No. 01/2016",
+     {
+        "filename": "pension-proclamation-final-one.pdf",
+        "title": "ፌደራል ነጋሪት ጋዜጣ - የግል ድርጅት ሠራተኞች ጡረታ አዋጅ  1268/2022 ",
     },
-    # {
-    #     "filename": "pdf",
-    #     "title": "REPLACE WITH THIS DOCUMENT'S REAL OFFICIAL TITLE",
-    # },
-    # Add the remaining 8 the same way — filename + real title, one per file.
+     {
+        "filename": "POESSA-proclamation-715-2003-PDF.pdf",
+        "title": "የግል ድርጅት ሠራተኞች ጡረታ አዋጅ  715/2011 ",
+    },
+     {
+        "filename": "Proc.No_.908-2015-Privet-Org.Emp_.SSAAmenedemenetProc.pdf",
+        "title": "የግል ድርጅት ሰራተኞች ጡረታ አዋጅን ለማሻሻል የወጣ አዋጅ",
+    },
+     {
+        "filename": "መመሪያ-ቁጥር-05-2016.pdf",
+        "title": "የጡረታ መዋጮ የመክፈል ግዴታቸውን ያልተወጡ የግል ድርጅቶች ሃብት የሚከበርበት ፣ የሚያዝበት እና እዳ የሚሰበብሰብበት አፈጻጸም መመሪያ ",
+    },
+     {
+        "filename": "መመሪያ-ቁጥር-06-2016 (1).pdf",
+        "title": "የግል ድርጅት ሰራተኞች ጡረታ መዋጮ ገቢ እቅድ አዘገጃጀት ፣ አሰባሰብ ፣ ትልልፍና ቁጥጥር መመሪያ ",
+    }, {
+        "filename": "የአስተዳደር-መመሪያ-2016.pdf",
+        "title": "የሰራተኞች አስተዳደር መመሪያ ቁጥር 03/2016",
+    }, {
+        "filename": "የጡረታ-አፈጻጸም-መመሪያ-ቁጥር-01-2016.pdf",
+        "title": "የጡረታ-አፈጻጸም-መመሪያ-ቁጥር-01/2016",
+    }, {
+        "filename": "የጡረታ-አፈጻጸም-ማንዋል (1).pdf",
+        "title": "የግል ድርጅት ሰራተኞች ጡረታ አፈጻጸም ማኑዋል",
+    }, 
 ]
 
 
