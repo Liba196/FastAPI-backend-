@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.chat import router as chat_router
 
+
 # DEV ONLY: allows requests from any origin. Browsers block frontend
 # JavaScript from calling a different-origin API unless the API
 # explicitly allows it via these headers — that's what CORS is.
@@ -19,11 +20,19 @@ def read_root():
 def health_check():
     return {"status": "ok"}
 
+origins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://poessaproject.netlify.app"  # <-- Paste your exact Netlify link here
+]
+
+# 2. Add the middleware config directly after creating the app instance
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=origins,         # Or use ["*"] to temporarily open it wide for debugging
+    allow_credentials=True,
+    allow_methods=["*"],           # Crucial: Allows the OPTIONS preflight method
+    allow_headers=["*"],           # Crucial: Allows Content-Type and custom auth headers
 )
 
 app.include_router(chat_router)
