@@ -39,6 +39,7 @@ origins = [
     "http://localhost:5173",
     "http://localhost:5500",
     "http://127.0.0.1:5500",
+    "poessaproject.netlify.app",
     "https://poessaproject.netlify.app"  # <-- Paste your exact Netlify link here
 ]
 
