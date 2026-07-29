@@ -5,11 +5,13 @@ from app.api.auth import router as auth_router
 from app.api.admin import router as admin_router
 from fastapi.security import HTTPBearer
 from app.api.users import router as users_router
+from app.api.documents import router as documents_router
 
 
 
 
-# DEV ONLY: allows requests from any origin. Browsers block frontend
+
+
 # JavaScript from calling a different-origin API unless the API
 # explicitly allows it via these headers — that's what CORS is.
 # Once the widget has a real dev URL (Step 9 follow-up), restrict
@@ -22,6 +24,7 @@ app = FastAPI()
 app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(users_router)
+app.include_router(documents_router)
 
 @app.get("/")
 def read_root():
@@ -34,6 +37,8 @@ def health_check():
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
     "https://poessaproject.netlify.app"  # <-- Paste your exact Netlify link here
 ]
 

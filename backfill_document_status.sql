@@ -1,0 +1,1 @@
+UPDATE documents SET status = 'done' WHERE status = 'pending';

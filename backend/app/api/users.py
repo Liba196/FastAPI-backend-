@@ -99,3 +99,46 @@ def update_user(
         conn.commit()
 
     return UserResponse(id=row[0], email=row[1], full_name=row[2], role=row[3], is_active=row[4], created_at=row[5])
+
+
+@router.delete("/api/v1/admin/users/{user_id}", status_code=204)
+def delete_user(
+    user_id: int,
+    current_user: dict = Depends(require_role("super_admin")),
+):
+    # Guard rail: Prevent a super_admin from deleting their own account
+    if str(user_id) == current_user["user_id"]:
+        raise HTTPException(
+            status_code=400, 
+            detail="You cannot delete your own admin account"
+        )
+
+    with psycopg.connect(DB_URL) as conn:
+        with conn.cursor() as cur:
+            # 1. Execute the delete query and check if the user existed
+            cur.execute(
+                "DELETE FROM admin_users WHERE id = %s RETURNING id", 
+                (user_id,)
+            )
+            row = cur.fetchone()
+            
+            # 2. If no row was returned, the user ID didn't exist
+            if not row:
+                raise HTTPException(
+                    status_code=404, 
+                    detail="User not found"
+                )
+        conn.commit()
+
+    # HTTP 204 means successful deletion with no content returned
+    return None
+
+
+
+
+
+
+
+
+
+

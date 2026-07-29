@@ -99,43 +99,64 @@ def get_or_create_document(cur, title: str, filename: str) -> tuple[int, int]:
 
 
 def ingest_document(pdf_path: str, title: str):
-    print(f"Extracting text from {pdf_path}...")
-    pages = extract_text(pdf_path)
-    chunks = chunk_text(pages)
-    print(f"Produced {len(chunks)} chunks")
-
     with psycopg.connect(DB_URL) as conn:
         register_vector(conn)
         with conn.cursor() as cur:
             document_id, already_done = get_or_create_document(cur, title, pdf_path)
-            conn.commit()  # commit immediately so the document row is safe even if we crash later
 
-            for i, chunk in enumerate(chunks):
-                if i < already_done:
-                    continue  # skip chunks we already embedded and stored in a previous run
+            cur.execute(
+                "UPDATE documents SET status = 'processing', error_message = NULL, updated_at = now() WHERE id = %s",
+                (document_id,),
+            )
+            conn.commit()
 
-                vector = embed_chunk(chunk["text"])
+            try:
+                print(f"Extracting text from {pdf_path}...")
+                pages = extract_text(pdf_path)
+                chunks = chunk_text(pages)
+                print(f"Produced {len(chunks)} chunks")
 
+                for i, chunk in enumerate(chunks):
+                    if i < already_done:
+                        continue
+
+                    vector = embed_chunk(chunk["text"])
+
+                    cur.execute(
+                        """
+                        INSERT INTO chunks (document_id, page_number, chunk_text, embedding)
+                        VALUES (%s, %s, %s, %s)
+                        """,
+                        (document_id, chunk["page_number"], chunk["text"], vector),
+                    )
+                    conn.commit()
+
+                    print(f"  Embedded + stored chunk {i + 1}/{len(chunks)}")
+                    time.sleep(SECONDS_BETWEEN_CALLS)
+
+            except Exception as e:
                 cur.execute(
-                    """
-                    INSERT INTO chunks (document_id, page_number, chunk_text, embedding)
-                    VALUES (%s, %s, %s, %s)
-                    """,
-                    (document_id, chunk["page_number"], chunk["text"], vector),
+                    "UPDATE documents SET status = 'failed', error_message = %s, updated_at = now() WHERE id = %s",
+                    (str(e), document_id),
                 )
-                conn.commit()  # commit after EVERY chunk so progress is cached securely
+                conn.commit()
+                print(f"Ingestion failed: {e}")
+                raise
 
-                print(f"  Embedded + stored chunk {i + 1}/{len(chunks)}")
-                time.sleep(SECONDS_BETWEEN_CALLS)
+            cur.execute(
+                "UPDATE documents SET status = 'done', updated_at = now() WHERE id = %s",
+                (document_id,),
+            )
+            conn.commit()
 
     print("Done.")
     return document_id
 
 
 if __name__ == "__main__":
-    # Make sure you run this script with your terminal located inside F:\COLLEGE\Poessa\
-    # Run command: python -m backend.app.services.embed_and_store
+    import os
+    pdf_path = os.path.join("documents", "pension-proclamation-final-one.pdf")
     ingest_document(
-        "backend/documents/sample.pdf",  # Fixed: Added 'backend/' prefix path
-        title="Private Organizations Employees' Pension Implementation Directive No. 01/2016",
+        pdf_path,
+        title="ፌደራል ነጋሪት ጋዜጣ - የግል ድርጅት ሠራተኞች ጡረታ አዋጅ  1268/2022 ",
     )

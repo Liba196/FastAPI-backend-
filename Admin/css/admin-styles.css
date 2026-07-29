@@ -1,0 +1,241 @@
+/* ==========================================================================
+   POESSA Admin Panel Styles
+   Reuses --poessa-* design tokens from the widget for visual consistency.
+   Import Frontend/css/styles.css BEFORE this file so tokens are available.
+   ========================================================================== */
+
+body {
+  margin: 0;
+  font-family: var(--poessa-font-body);
+  color: var(--poessa-ink);
+  background: var(--poessa-bg-soft);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Login page ---- */
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.admin-login__card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--poessa-surface);
+  border: 1px solid var(--poessa-border);
+  border-radius: var(--poessa-radius-lg);
+  box-shadow: var(--poessa-shadow-window);
+  padding: 36px 32px;
+}
+
+.admin-login__logo {
+  width: 48px;
+  display: block;
+  margin: 0 auto 16px;
+}
+
+.admin-login__title {
+  font-family: var(--poessa-font-display);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--poessa-primary-dark);
+  text-align: center;
+  margin: 0 0 4px;
+}
+
+.admin-login__subtitle {
+  font-size: 13px;
+  color: var(--poessa-ink-soft);
+  text-align: center;
+  margin: 0 0 28px;
+}
+
+.admin-field {
+  margin-bottom: 16px;
+}
+
+.admin-field label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--poessa-ink);
+  margin-bottom: 6px;
+}
+
+.admin-field input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: var(--poessa-font-body);
+  border: 1.5px solid var(--poessa-border);
+  border-radius: var(--poessa-radius-sm);
+  background: var(--poessa-bg-soft);
+  color: var(--poessa-ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-field input:focus {
+  outline: none;
+  border-color: var(--poessa-primary);
+  box-shadow: 0 0 0 3px var(--poessa-primary-tint);
+  background: var(--poessa-surface);
+}
+
+.admin-btn {
+  width: 100%;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--poessa-font-body);
+  color: #fff;
+  background: linear-gradient(155deg, var(--poessa-primary) 0%, var(--poessa-primary-dark) 100%);
+  border: none;
+  border-radius: var(--poessa-radius-sm);
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.admin-btn:hover:not(:disabled) {
+  box-shadow: var(--poessa-shadow-button);
+}
+
+.admin-btn:disabled {
+  background: #B0C4DE;
+  cursor: not-allowed;
+}
+
+.admin-error {
+  background: #FEE2E2;
+  color: var(--poessa-danger);
+  border: 1px solid #FCA5A5;
+  border-radius: var(--poessa-radius-sm);
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.admin-error.is-visible {
+  display: block;
+}
+
+
+
+
+/* ---- Dashboard shell ---- */
+.admin-shell { min-height: 100vh; display: flex; flex-direction: column; }
+
+.admin-topbar {
+  background: linear-gradient(155deg, var(--poessa-primary) 0%, var(--poessa-primary-dark) 100%);
+  color: #fff;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.admin-topbar__logo { width: 32px; display: block; }
+.admin-topbar__title {
+  font-family: var(--poessa-font-display);
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+.admin-topbar__user { font-size: 12.5px; color: rgba(255,255,255,0.85); }
+.admin-topbar__logout {
+  background: rgba(255,255,255,0.14);
+  color: #fff;
+  border: none;
+  border-radius: var(--poessa-radius-sm);
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.admin-topbar__logout:hover { background: rgba(255,255,255,0.24); }
+
+.admin-nav {
+  display: flex;
+  gap: 4px;
+  padding: 0 24px;
+  background: var(--poessa-surface);
+  border-bottom: 1px solid var(--poessa-border);
+}
+.admin-nav__tab {
+  padding: 13px 16px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--poessa-ink-soft);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.admin-nav__tab.is-active { color: var(--poessa-primary-dark); border-bottom-color: var(--poessa-primary); }
+.admin-nav__tab[hidden] { display: none; }
+
+.admin-main { flex: 1; padding: 28px 24px; max-width: 960px; width: 100%; margin: 0 auto; }
+.admin-section[hidden] { display: none; }
+
+.admin-panel {
+  background: var(--poessa-surface);
+  border: 1px solid var(--poessa-border);
+  border-radius: var(--poessa-radius-md);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.admin-panel__title {
+  font-family: var(--poessa-font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--poessa-primary-dark);
+  margin: 0 0 16px;
+}
+
+/* ---- Upload form ---- */
+.admin-upload-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+.admin-upload-row .admin-field { flex: 1; min-width: 180px; margin-bottom: 0; }
+.admin-upload-row .admin-btn { width: auto; padding: 10px 20px; white-space: nowrap; }
+
+/* ---- Table ---- */
+.admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.admin-table th {
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--poessa-ink-soft);
+  border-bottom: 1.5px solid var(--poessa-border);
+}
+.admin-table td { padding: 10px; border-bottom: 1px solid var(--poessa-border); vertical-align: middle; }
+.admin-table tr:last-child td { border-bottom: none; }
+
+.admin-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.admin-badge--pending { background: #FEF3C7; color: #92400E; }
+.admin-badge--processing { background: var(--poessa-primary-tint); color: var(--poessa-primary-dark); }
+.admin-badge--done { background: #D1FAE5; color: #065F46; }
+.admin-badge--failed { background: #FEE2E2; color: var(--poessa-danger); }
+
+.admin-icon-btn {
+  background: none;
+  border: none;
+  color: var(--poessa-danger);
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 4px 8px;
+}
+.admin-icon-btn:hover { text-decoration: underline; }
+
+.admin-empty { color: var(--poessa-ink-soft); font-size: 13px; padding: 16px 0; text-align: center; }
