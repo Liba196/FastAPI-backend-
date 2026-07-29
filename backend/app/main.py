@@ -1,6 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI , Depends
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.chat import router as chat_router
+from app.api.auth import router as auth_router
+from app.api.admin import router as admin_router
+from fastapi.security import HTTPBearer
+from app.api.users import router as users_router
+
+
 
 
 # DEV ONLY: allows requests from any origin. Browsers block frontend
@@ -10,7 +16,12 @@ from app.api.chat import router as chat_router
 # allow_origins to that exact URL instead of "*", and definitely
 # before this goes anywhere near production (Phase 11 of the blueprint).
 
+
 app = FastAPI()
+
+app.include_router(auth_router)
+app.include_router(admin_router)
+app.include_router(users_router)
 
 @app.get("/")
 def read_root():

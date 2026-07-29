@@ -5,7 +5,7 @@
  * POESSAApi (backend calls, mocked for now).
  */
 (function (global) {
-  'use strict';
+  "use strict";
 
   const Ui = global.POESSAUi;
   const Messages = global.POESSAMessages;
@@ -13,10 +13,10 @@
   const { scrollToBottom, isBlank } = global.POESSAUtils;
 
   const SUGGESTED_QUESTIONS = [
-    'እንዴት መመዝገብ እችላለሁ?',
-    'አስፈላጊ ሰነዶች',
-    'የጡረታ ብቃት',
-    'የመገኛ አድራሻ',
+    "የግል ድርጅት ሠራተኛ ለመመዝገብ ምን ማስረጃዎች ያስፈልጋሉ?",
+    "ለጤና ጉድለት ጡረታ አበል ስሌት ከወር ደመወዝ ስንት በመቶ ሊበልጥ አይችልም?",
+    "የጡረታ አበል ውዝፍ ክፍያ ጥያቄ በስንት ዓመት ውስጥ በይርጋ ይታገዳል?",
+    "ያልተከፈለ የጡረታ መዋጮ ያለበት ድርጅት ንብረት እንዴት ይያዛል?",
   ];
 
   function Chatbot(rootEl) {
@@ -31,30 +31,31 @@
   }
 
   Chatbot.prototype._bindEvents = function () {
-    const { launcher, minimizeBtn, closeBtn, textarea, sendBtn, chatWindow } = this.refs;
+    const { launcher, minimizeBtn, closeBtn, textarea, sendBtn, chatWindow } =
+      this.refs;
 
-    launcher.addEventListener('click', () => this.toggleWindow());
-    minimizeBtn.addEventListener('click', () => this.minimizeWindow());
-    closeBtn.addEventListener('click', () => this.closeWindow());
+    launcher.addEventListener("click", () => this.toggleWindow());
+    minimizeBtn.addEventListener("click", () => this.minimizeWindow());
+    closeBtn.addEventListener("click", () => this.closeWindow());
 
-    textarea.addEventListener('input', () => {
+    textarea.addEventListener("input", () => {
       Ui.autoResizeTextarea(textarea);
       sendBtn.disabled = isBlank(textarea.value);
     });
 
-    textarea.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
+    textarea.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         this.sendCurrentInput();
       }
       // Shift+Enter falls through and inserts a newline naturally.
     });
 
-    sendBtn.addEventListener('click', () => this.sendCurrentInput());
+    sendBtn.addEventListener("click", () => this.sendCurrentInput());
 
     // Escape closes the window when focus is inside it.
-    chatWindow.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
+    chatWindow.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
         this.closeWindow();
       }
     });
@@ -71,7 +72,7 @@
   };
 
   Chatbot.prototype.toggleWindow = function () {
-    const isOpen = this.refs.chatWindow.classList.contains('is-open');
+    const isOpen = this.refs.chatWindow.classList.contains("is-open");
     if (isOpen) {
       this.closeWindow();
     } else {
@@ -98,11 +99,11 @@
     const text = textarea.value.trim();
     if (isBlank(text) || this.isWaitingForReply) return;
 
-    textarea.value = '';
-    textarea.style.height = 'auto';
+    textarea.value = "";
+    textarea.style.height = "auto";
     this.refs.sendBtn.disabled = true;
 
-    this._addMessage(Messages.createMessage({ role: 'user', text }));
+    this._addMessage(Messages.createMessage({ role: "user", text }));
     this._requestAssistantReply(text);
   };
 
@@ -129,10 +130,10 @@
         typingRow.remove();
         this._addMessage(
           Messages.createMessage({
-            role: 'assistant',
-            text: 'ያንን መልእክት በመላክ ላይ ስህተት ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።',
+            role: "assistant",
+            text: "ያንን መልእክት በመላክ ላይ ስህተት ተፈጥሯል። እባክዎ እንደገና ይሞክሩ።",
             isError: true,
-          })
+          }),
         );
       })
       .finally(() => {
@@ -142,4 +143,3 @@
 
   global.POESSAChatbot = Chatbot;
 })(window);
-
