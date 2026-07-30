@@ -9,6 +9,8 @@ from app.core.deps import require_role
 from app.services.embed_and_store import ingest_document, DB_URL
 from app.api.document_schemas import DocumentResponse
 
+from fastapi.responses import FileResponse
+
 router = APIRouter(prefix="/api/v1/admin/documents", tags=["documents"])
 
 UPLOADS_DIR = "uploads"
@@ -129,3 +131,34 @@ def delete_document(document_id: int, user=Depends(require_role("super_admin")))
             os.remove(source_filename)
         except OSError as e:
             print(f"Warning: DB row deleted but failed to remove file {source_filename}: {e}")
+
+
+@router.get("/{document_id}/file")
+def get_document_file(
+    document_id: int,
+    user=Depends(require_role("super_admin", "content_editor")),
+):
+    with psycopg.connect(DB_URL) as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT source_filename FROM documents WHERE id = %s",
+                (document_id,),
+            )
+            row = cur.fetchone()
+
+    if not row:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    file_path = row[0]
+
+    if not os.path.exists(file_path):
+        raise HTTPException(
+            status_code=404,
+            detail=f"Document record exists but file is missing from disk: {file_path}",
+        )
+
+    return FileResponse(
+        file_path,
+        media_type="application/pdf",
+        filename=os.path.basename(file_path),
+    )
