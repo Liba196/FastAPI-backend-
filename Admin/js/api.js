@@ -1,7 +1,7 @@
 (function (global) {
   "use strict";
 
-  const API_BASE_URL = "http://localhost:8000";
+  const API_BASE_URL = "https://fastapi-backend-97x8.onrender.com";
 
   function authHeaders() {
     const token = global.POESSAAdminAuth.getToken();
