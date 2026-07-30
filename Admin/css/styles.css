@@ -9,15 +9,15 @@
   --poessa-ink: #0A1628;
   --poessa-ink-soft: #4A5568;
   --poessa-surface: #FFFFFF;
-  --poessa-bg-soft: #F0F4FF;
-  --poessa-primary: #1A56DB;
-  --poessa-primary-dark: #1E3A8A;
-  --poessa-primary-tint: #DBEAFE;
-  --poessa-accent: #1A56DB;
-  --poessa-accent-soft: #DBEAFE;
-  --poessa-border: #E2E8F0;
+  --poessa-bg-soft: #F5F7FA;
+  --poessa-primary: #3498db;
+  --poessa-primary-dark: #2874A6;
+  --poessa-primary-tint: #D6EAF8;
+  --poessa-accent: #3498db;
+  --poessa-accent-soft: #D6EAF8;
+  --poessa-border: #E8ECF1;
   --poessa-danger: #DC2626;
-  --poessa-focus-ring: #3B82F6;
+  --poessa-focus-ring: #3498db;
 
   /* Type */
   --poessa-font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
@@ -44,8 +44,7 @@ body {
   margin: 0;
   font-family: var(--poessa-font-body);
   color: var(--poessa-ink);
-  /* background: var(--poessa-bg-soft); */
-  background: #3498db;
+  background: var(--poessa-bg-soft);
   -webkit-font-smoothing: antialiased;
 }
 
