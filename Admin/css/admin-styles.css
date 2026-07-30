@@ -37,6 +37,8 @@ body {
   margin: 0 auto 16px;
 }
 
+.admin-icon-btn--view { color: var(--poessa-primary); margin-right: 4px; }
+
 .admin-login__title {
   font-family: var(--poessa-font-display);
   font-size: 21px;

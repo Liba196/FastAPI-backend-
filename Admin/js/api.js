@@ -58,6 +58,25 @@
     }).then(handleResponse);
   }
 
+  function viewDocumentFile(id) {
+    return fetch(`${API_BASE_URL}/api/v1/admin/documents/${id}/file`, {
+      headers: authHeaders(),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          return res.json().then((body) => {
+            throw new Error(body.detail || `Request failed (${res.status})`);
+          });
+        }
+        return res.blob();
+      })
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+      });
+  }
+
   function listUsers() {
     return fetch(`${API_BASE_URL}/api/v1/admin/users`, {
       headers: authHeaders(),
@@ -86,6 +105,7 @@
     listDocuments,
     uploadDocument,
     deleteDocument,
+    viewDocumentFile,
     listUsers,
     createUser,
     patchUser,

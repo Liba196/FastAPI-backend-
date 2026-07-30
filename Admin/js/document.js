@@ -20,16 +20,23 @@
   }
 
   function renderRow(doc) {
-    const deleteBtn = h("button", { class: "admin-icon-btn" }, ["Delete"]);
-    deleteBtn.addEventListener("click", () => onDelete(doc));
+  const viewBtn = h("button", { class: "admin-icon-btn admin-icon-btn--view" }, ["View"]);
+  viewBtn.addEventListener("click", () => onView(doc));
 
-    return h("tr", {}, [
-      h("td", {}, [doc.title]),
-      h("td", {}, [doc.source_filename]),
-      h("td", {}, [statusBadge(doc.status)]),
-      h("td", {}, [deleteBtn]),
-    ]);
-  }
+  const deleteBtn = h("button", { class: "admin-icon-btn" }, ["Delete"]);
+  deleteBtn.addEventListener("click", () => onDelete(doc));
+
+  return h("tr", {}, [
+    h("td", {}, [doc.title]),
+    h("td", {}, [doc.source_filename]),
+    h("td", {}, [statusBadge(doc.status)]),
+    h("td", {}, [viewBtn, deleteBtn]),
+  ]);
+}
+
+function onView(doc) {
+  api.viewDocumentFile(doc.id).catch((err) => window.alert(`Could not open file: ${err.message}`));
+}
 
   function render(documents) {
     tbody.innerHTML = "";
@@ -107,3 +114,5 @@
 
   global.POESSAAdminDocuments = { refresh };
 })(window);
+
+
