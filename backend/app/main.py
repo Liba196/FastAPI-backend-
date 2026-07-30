@@ -41,6 +41,7 @@ origins = [
     "http://127.0.0.1:5500",
     "http://poessaproject.netlify.app",
     "http://127.0.0.1:5500/Admin/index.html",
+    "https://poessa-admin-dashboard.netlify.app",
     "https://poessaproject.netlify.app"  # <-- Paste your exact Netlify link here
 ]
 
