@@ -99,7 +99,7 @@ def get_or_create_document(cur, title: str, filename: str) -> tuple[int, int]:
 
 
 def ingest_document(pdf_path: str, title: str):
-    with psycopg.connect(DB_URL) as conn:
+    with psycopg.connect(DB_URL, prepare_threshold=None) as conn:
         register_vector(conn)
         with conn.cursor() as cur:
             document_id, already_done = get_or_create_document(cur, title, pdf_path)
@@ -135,6 +135,7 @@ def ingest_document(pdf_path: str, title: str):
                     time.sleep(SECONDS_BETWEEN_CALLS)
 
             except Exception as e:
+                conn.rollback()
                 cur.execute(
                     "UPDATE documents SET status = 'failed', error_message = %s, updated_at = now() WHERE id = %s",
                     (str(e), document_id),
