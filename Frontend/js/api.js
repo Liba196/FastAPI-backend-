@@ -1,20 +1,30 @@
 (function (global) {
   "use strict";
 
-  const API_BASE_URL = "https://fastapi-backend-97x8.onrender.com";
+  // Reads the backend URL from the widget root's data attribute, so any
+  // site embedding this widget can point it at their own deployment
+  // without touching JS at all — just one HTML attribute.
+  //   <div id="poessa-chat-widget-root" data-api-base-url="https://..."></div>
+  // Falls back to POESSA's own production backend if the attribute is
+  // missing, so existing embeds (and this demo page) keep working
+  // unchanged.
+  const DEFAULT_API_BASE_URL = "https://fastapi-backend-97x8.onrender.com";
+
+  function resolveApiBaseUrl() {
+    const root = document.getElementById("poessa-chat-widget-root");
+    const configured = root && root.getAttribute("data-api-base-url");
+    return (configured && configured.trim()) || DEFAULT_API_BASE_URL;
+  }
+
+  const API_BASE_URL = resolveApiBaseUrl();
   const CHAT_ENDPOINT = `${API_BASE_URL}/api/v1/chat`;
 
-  // Persisted for the life of the page so follow-up questions carry the
-  // same session_id. The backend doesn't use this for real conversation
-  // memory yet — that's a tracked, deferred piece (Phase 7's
-  // chat_sessions/chat_messages) — but wiring the plumbing now means
-  // nothing here needs to change once it does.
   let currentSessionId = null;
 
   function mapCitationsToSources(citations) {
     return (citations || []).map((c) => ({
       title: c.document_title,
-      excerpt: c.page_number ? `ገጽ ${c.page_number}` : null, // "Page N"
+      excerpt: c.page_number ? `ገጽ ${c.page_number}` : null,
     }));
   }
 
@@ -45,8 +55,6 @@
           isUngrounded: !data.grounded,
         };
       });
-    // Network/parsing errors deliberately propagate — chatbot.js
-    // already has a .catch() that shows a friendly Amharic error bubble.
   }
 
   function streamMessage(userText, history, onChunk) {

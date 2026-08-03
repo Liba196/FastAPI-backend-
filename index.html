@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Addis Business Weekly — Totally Unrelated News Site</title>
+<link rel="stylesheet" href="../Frontend/css/styles.css">
+<style>
+  /* Deliberately generic, unrelated styling — proves the widget's own
+     --poessa-* namespaced CSS doesn't clash with a host site's styles. */
+  body {
+    margin: 0;
+    font-family: Georgia, serif;
+    background: #f4f1ea;
+    color: #222;
+  }
+  header {
+    background: #8b1a1a;
+    color: white;
+    padding: 20px 32px;
+  }
+  header h1 { margin: 0; font-size: 24px; }
+  header p { margin: 4px 0 0; opacity: 0.85; font-size: 13px; }
+  main { max-width: 700px; margin: 0 auto; padding: 32px; }
+  article h2 { font-size: 20px; }
+  article p { line-height: 1.7; color: #444; }
+  .banner {
+    background: #fff3cd;
+    border: 1px solid #ffe69c;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 24px;
+
+  }
+
+  
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>Addis Business Weekly</h1>
+    <p>Completely unrelated fictional news site — used only to prove the POESSA widget embeds cleanly anywhere.</p>
+  </header>
+
+  <main>
+    <div class="banner">
+      This page has nothing to do with POESSA. It exists purely to demonstrate that
+      the chat widget in the bottom-right corner works correctly when embedded on a
+      totally unrelated site — different fonts, different colors, different layout,
+      different origin entirely.
+    </div>
+
+    <article>
+      <h2>Local Manufacturing Sees Modest Growth This Quarter</h2>
+      <p>
+        Analysts report a modest uptick in manufacturing output across the region,
+        driven largely by increased demand in the textile and food-processing
+        sectors. Industry representatives point to improved logistics and
+        stabilized input costs as key contributing factors.
+      </p>
+      <p>
+        Meanwhile, look for the chat bubble in the corner — that's the real,
+        live POESSA pension assistant, embedded here with nothing more than
+        one div and six script tags.
+      </p>
+    </article>
+  </main>
+
+  <!-- ============================================================
+       THE ENTIRE EMBED — this is all any external site needs.
+       No data-api-base-url attribute set here deliberately, so it
+       falls back to POESSA's real production backend automatically.
+  ============================================================= -->
+  <div id="poessa-chat-widget-root"></div>
+
+  <script src="../Frontend/js/utils.js"></script>
+  <script src="../Frontend/js/api.js"></script>
+  <script src="../Frontend/js/messages.js"></script>
+  <script src="../Frontend/js/ui.js"></script>
+  <script src="../Frontend/js/chatbot.js"></script>
+  <script src="../Frontend/js/main.js"></script>
+</body>
+</html>
