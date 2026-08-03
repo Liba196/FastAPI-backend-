@@ -162,3 +162,38 @@ def get_document_file(
         media_type="application/pdf",
         filename=os.path.basename(file_path),
     )
+
+@router.post("/{document_id}/retry", status_code=202)
+def retry_ingestion(
+    document_id: int,
+    background_tasks: BackgroundTasks,
+    user=Depends(require_role("super_admin", "content_editor")),
+):
+    with psycopg.connect(DB_URL) as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT title, source_filename, status FROM documents WHERE id = %s",
+                (document_id,),
+            )
+            row = cur.fetchone()
+
+    if not row:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    title, source_filename, status = row
+
+    if status not in ("failed", "processing"):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Document is currently '{status}' — retry is only meaningful for 'failed' or stuck 'processing' documents.",
+        )
+
+    if not os.path.exists(source_filename):
+        raise HTTPException(
+            status_code=404,
+            detail=f"Cannot retry: source file no longer exists on disk at {source_filename}",
+        )
+
+    background_tasks.add_task(ingest_document, source_filename, title)
+
+    return {"document_id": document_id, "status": "processing", "message": "Retry started"}

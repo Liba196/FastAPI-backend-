@@ -26,12 +26,26 @@
   const deleteBtn = h("button", { class: "admin-icon-btn" }, ["Delete"]);
   deleteBtn.addEventListener("click", () => onDelete(doc));
 
+  const buttons = [viewBtn, deleteBtn];
+
+  if (doc.status === "failed") {
+    const retryBtn = h("button", { class: "admin-icon-btn admin-icon-btn--view" }, ["Retry"]);
+    retryBtn.addEventListener("click", () => onRetry(doc));
+    buttons.unshift(retryBtn); // Retry first, most relevant action for a failed doc
+  }
+
   return h("tr", {}, [
     h("td", {}, [doc.title]),
     h("td", {}, [doc.source_filename]),
     h("td", {}, [statusBadge(doc.status)]),
-    h("td", {}, [viewBtn, deleteBtn]),
+    h("td", {}, buttons),
   ]);
+}
+
+function onRetry(doc) {
+  api.retryDocument(doc.id)
+    .then(refresh) // immediately shows status flip back to 'processing', re-triggers auto-poll
+    .catch((err) => window.alert(`Retry failed: ${err.message}`));
 }
 
 function onView(doc) {

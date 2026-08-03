@@ -99,6 +99,13 @@
     }).then(handleResponse);
   }
 
+function retryDocument(id) {
+  return fetch(`${API_BASE_URL}/api/v1/admin/documents/${id}/retry`, {
+    method: "POST",
+    headers: authHeaders(),
+  }).then(handleResponse);
+}
+
   global.POESSAAdminApi = {
     API_BASE_URL,
     login,
@@ -109,5 +116,7 @@
     listUsers,
     createUser,
     patchUser,
+    retryDocument,
   };
 })(window);
+
